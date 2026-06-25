@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Googol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<div th:insert="~{_nav :: nav}"></div>
+
+<main class="container">
+  <section class="hero">
+    <h1 class="brand">Googol</h1>
+    <form role="search" method="get" action="/search" class="hero-search">
+      <input class="search-input" type="text" name="q" placeholder="SD is the best..." required autofocus>
+      <input type="hidden" name="page" value="1">
+      <button class="search-btn" type="submit">Search</button>
+    </form>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

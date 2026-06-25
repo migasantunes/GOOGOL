@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hacker News Review</title>
+  <!-- Preconnect para otimizar carregamento de fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonte Inter do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Estilos CSS da aplicação -->
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<!-- Navegação comum (Thymeleaf fragment) -->
+<div th:insert="~{_nav :: nav}"></div>
+<!-- Container principal -->
+<main class="container">
+    <h1>Hacker News Mentions</h1>
+  <!-- Mostra a query pesquisada se existirem resultados -->
+  <p th:if="${hnLinks != null and !#lists.isEmpty(hnLinks)}" style="color: var(--text-muted);">Showing stories matching "<span th:text="${query}" style="font-weight:600; color:var(--text-main)"></span>"</p>
+
+    <p th:if="${error}" class="error-msg" th:text="${error}"></p>
+
+  <!-- Secção de resultados do HackerNews -->
+  <div th:if="${hnLinks != null and !#lists.isEmpty(hnLinks)}">
+    <!-- Ações em lote -->
+    <div class="list-actions" style="margin-bottom: 1.5rem;">
+            <button type="button" id="index-all-btn" class="btn pill">Index ALL Stories</button>
+    </div>
+    
+        <ul style="display: flex; flex-direction: column; gap: 1rem;">
+      <!-- Itera sobre cada link do HackerNews -->
+      <li th:each="l : ${hnLinks}" style="background: white; padding: 1rem; border-radius: 8px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+        <div style="flex: 1;">
+            <!-- Título da história com link -->
+            <a th:href="${l.url}" th:text="${l.title}" target="_blank" rel="noopener" style="font-weight: 500; color: var(--text-main); display: block; margin-bottom: 0.25rem;"></a>
+            <!-- URL da história -->
+            <span style="font-size: 0.8rem; color: var(--text-muted);" th:text="${l.url}"></span>
+        </div>
+        
+        <!-- Formulário para indexar história individual -->
+        <form method="post" action="/hn-index-one" class="ajax-index-one">
+          <!-- Campo oculto com a query -->
+          <input type="hidden" name="q" th:value="${query}" />
+          <!-- Campo oculto com o URL a indexar -->
+          <input type="hidden" name="url" th:value="${l.url}" />
+          <button type="submit" class="btn pill secondary" style="font-size: 0.8rem;">Index this</button>
+        </form>
+      </li>
+    </ul>
+    
+    <!-- Link para voltar à pesquisa -->
+    <div class="list-actions" style="margin-top: 2rem;">
+      <a th:href="@{/search(q=${query})}" class="btn secondary pill">« Back to search</a>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há resultados -->
+  <div th:if="${hnLinks == null || #lists.isEmpty(hnLinks)}" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+    <p>No matching Hacker News links found for this topic.</p>
+    <a th:href="@{/search(q=${query})}" class="btn secondary pill">Back to search</a>
+  </div>
+  
+</main>
+<!-- Script específico para funcionalidades do HackerNews -->
+<script src="/hn.js"></script>
+</body>
+</html>

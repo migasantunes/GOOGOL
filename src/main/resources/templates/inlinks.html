@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inlinks</title>
+  <!-- Preconnect para otimizar carregamento de fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonte Inter do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Estilos CSS da aplicação -->
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<!-- Navegação comum (Thymeleaf fragment) -->
+<div th:insert="~{_nav :: nav}"></div>
+<!-- Container principal -->
+<main class="container">
+  <!-- Título da página -->
+  <h1>Inlinks Analysis</h1>
+  
+  <!-- Card com informação dos inlinks -->
+  <div style="background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+    <!-- Descrição -->
+    <p style="margin-top:0; color: var (--text-muted);">Pages that link to:</p>
+    <!-- URL alvo da análise de inlinks -->
+    <h2 style="margin-top:0.5rem; font-size: 1.2rem; word-break: break-all;">
+      <a th:href="${url}" th:text="${url}" target="_blank" style="color: var(--primary);"></a>
+    </h2>
+    
+    <!-- Separador visual -->
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+
+    <!-- Lista de páginas que apontam para o URL -->
+    <ul style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <!-- Itera sobre cada inlink -->
+      <li th:each="u : ${inlinks}">
+        <a th:href="${u}" th:text="${u}" style="color: #2563eb; text-decoration: none;"></a>
+        <!-- Ícone indicador de link externo -->
+        <span style="color: #94a3b8; font-size: 0.8rem;">↗</span>
+      </li>
+    </ul>
+
+            <div style="margin-top: 2rem;">
+        <a th:href="@{/search(q=${query},page=${page})}" class="btn secondary pill">Back to search results</a>
+      </div>
+  </div>
+</main>
+</body>
+</html>

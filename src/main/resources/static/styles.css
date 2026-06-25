@@ -1,0 +1,379 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
+:root {
+  --primary: #4f46e5;       /* Indigo 600 */
+  --primary-hover: #4338ca; /* Indigo 700 */
+  --bg-body: #f8fafc;       /* Slate 50 */
+  --bg-card: #ffffff;
+  --text-main: #0f172a;     /* Slate 900 */
+  --text-muted: #64748b;    /* Slate 500 */
+  --border: #e2e8f0;        /* Slate 200 */
+  --accent-ai: #eff6ff;     /* Blue 50 */
+  --accent-ai-border: #bfdbfe;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-md: 0.5rem;
+  --radius-full: 9999px;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; transition: color 0.2s; }
+ul { list-style: none; padding: 0; margin: 0; }
+
+/* =========================================
+   2. NAVIGATION
+   ========================================= */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 2rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+
+nav a {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+nav a:hover, nav a.active { color: var(--primary); }
+
+nav button { margin-left: auto; }
+
+/* =========================================
+   3. HERO (HOME PAGE)
+   ========================================= */
+.hero {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.brand {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+
+.hero-search {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.hero-search .search-input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.hero-search .search-input:focus {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg), 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.hero-search .search-btn {
+  display: none; /* Hide button on home, allow enter key, or style icon */
+}
+
+/* =========================================
+   4. LAYOUT & UTILS
+   ========================================= */
+main.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+main { padding: 2rem; }
+
+h1 { font-size: 2rem; font-weight: 700; color: var(--text-main); margin-bottom: 1.5rem; }
+h2 { font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem; }
+
+/* Buttons */
+.btn, button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+button, .btn:not(.secondary) {
+  background-color: var(--text-main);
+  color: white;
+}
+
+button:hover, .btn:not(.secondary):hover {
+  background-color: black;
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  background-color: white;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.btn.secondary:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.btn.pill { border-radius: var(--radius-full); }
+
+/* Forms */
+input[type="text"], input[type="url"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  outline: none;
+}
+
+input:focus { border-color: var(--primary); }
+
+/* =========================================
+   5. SEARCH RESULTS
+   ========================================= */
+/* Results Container - Center it like Google */
+body:has(.result-item) main {
+  max-width: 800px; /* Optimal reading width */
+  margin-left: 10%; /* Slight offset to the left */
+}
+
+/* AI Box */
+section[th\:if="\${analysis}"] {
+  background: var(--accent-ai);
+  border: 1px solid var(--accent-ai-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+section[th\:if="\${analysis}"] h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #1e40af; /* Dark Blue */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Add a sparkle icon via CSS before "AI Analysis" */
+section[th\:if="\${analysis}"] h2::before {
+  content: "✨";
+}
+
+section[th\:if="\${analysis}"] p {
+  color: #1e3a8a;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* Individual Results */
+.result-item {
+  margin-bottom: 2rem;
+  padding-bottom: 0;
+  background: transparent;
+  border: none;
+}
+
+.result-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.4rem 0;
+  font-weight: 500;
+}
+
+.result-title a {
+  color: #1a0dab; /* Classic Search Blue or use var(--primary) */
+  text-decoration: none;
+}
+
+.result-title a:hover { text-decoration: underline; }
+
+.result-snippet {
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 650px;
+}
+
+/* Result Meta Actions */
+.result-actions { margin-top: 0.5rem; }
+.result-actions .btn {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   6. STATS & HN (Cards)
+   ========================================= */
+.stats, .modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+#stats {
+  background: #0f172a; /* Dark terminal look */
+  color: #a5b4fc;
+  font-family: 'Fira Code', monospace;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* =========================================
+   7. MODAL & TOAST
+   ========================================= */
+#submit-url-modal {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+}
+
+#toast {
+  background: #1e293b;
+  color: white;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-lg);
+  font-weight: 500;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* =========================================
+   8. STATS DASHBOARD (Novo JS)
+   ========================================= */
+
+/* Remove o estilo antigo de terminal se ainda estiver lá */
+#stats {
+  background: transparent !important;
+  color: inherit !important;
+  font-family: var(--font-sans) !important;
+  padding: 0 !important;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .stats-grid { grid-template-columns: 1fr 1.5fr; } /* Tabela ganha mais espaço */
+}
+
+.stats-heading {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+/* Chips (Top Searches) */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.stat-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.query-text { margin-right: 6px; font-weight: 500; }
+.query-count { 
+  background: #cbd5e1; 
+  color: #334155; 
+  font-size: 0.75rem; 
+  padding: 1px 6px; 
+  border-radius: 999px; 
+}
+
+/* Modern Table */
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+}
+
+.modern-table th {
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 2px solid var(--border);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.modern-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+
+.modern-table tr:last-child td { border-bottom: none; }
+
+/* Status Dots */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-dot.online { background-color: #10b981; box-shadow: 0 0 0 2px #d1fae5; } /* Green */
+.status-dot.offline { background-color: #ef4444; box-shadow: 0 0 0 2px #fee2e2; } /* Red */

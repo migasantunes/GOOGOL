@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statistics - Googol</title>
+  <!-- Fontes Google para tipografia consistente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code&display=swap" rel="stylesheet">
+  <!-- Estilos CSS da aplicação -->
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<!-- Navegação comum a todas as páginas (Thymeleaf fragment) -->
+<div th:insert="~{_nav :: nav}"></div>
+<!-- Container principal da página de estatísticas -->
+<main class="container">
+  <!-- Título da página -->
+  <h1>Real-time Statistics</h1>
+  <!-- Descrição da página -->
+  <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+    Live monitoring of barrels, query throughput, and active nodes.
+  </p>
+  
+  <!-- Secção onde as estatísticas são renderizadas dinamicamente via JavaScript -->
+  <article class="stats">
+    <!-- Cabeçalho da secção de métricas -->
+    <header style="border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; margin-bottom: 1rem; color: #cbd5e1;">
+      <strong>System Metrics</strong>
+    </header>
+    <!-- Conteúdo atualizado pelo app.js quando recebe dados via WebSocket -->
+    <div id="stats">Connecting to WebSocket...</div>
+  </article>
+</main>
+<!-- SockJS: biblioteca para fallback WebSocket em browsers antigos -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<!-- STOMP.js: protocolo de mensagens sobre WebSocket -->
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<!-- Script principal que conecta ao WebSocket e atualiza a UI -->
+<script src="/app.js"></script>
+</body>
+</html>

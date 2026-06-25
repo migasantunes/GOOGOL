@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Fragment Thymeleaf reutilizável para navegação -->
+<div th:fragment="nav">
+    <nav>
+    <!-- Logo/link para página inicial -->
+    <a href="/" style="font-weight: 800; color: var(--text-main); font-size: 1.1rem;">Googol</a>
+    
+    <!-- Link para resultados (só aparece se houver query) -->
+    <a th:href="@{/search(q=${query},page=${page} )}" th:if="${query}">Results</a>
+    <!-- Link para estatísticas do sistema -->
+    <a href="/stats">System Stats</a>
+    <!-- Link para HackerNews (só aparece se houver query) -->
+    <a th:href="@{/hn-review(q=${query})}" th:if="${query}">Hacker News</a>
+    
+        <button type="button" id="open-submit-url" class="btn">Submit URL</button>
+  </nav>
+
+  <!-- Modal para submeter novo URL (inicialmente oculto) -->
+  <div id="submit-url-modal" hidden>
+    <div class="modal-card">
+      <!-- Título do modal -->
+      <h3 style="margin-top:0">Submit new URL</h3>
+      <!-- Descrição do modal -->
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">
+        Enter a URL to be crawled and indexed by the Barrels.
+      </p>
+      <!-- Formulário de submissão de URL -->
+      <form id="submit-url-form" method="post" action="/submit">
+        <input name="url" type="url" placeholder="https://example.com/" required style="margin-bottom: 1rem;" />
+        <div class="modal-actions" style="display:flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" id="close-submit-url" class="btn secondary">Cancel</button>
+          <button type="submit" class="btn">Enqueue URL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Toast para notificações rápidas (inicialmente oculto) -->
+  <div id="toast" hidden></div>
+  <!-- Script para funcionalidades da UI (modais, toasts, etc.) -->
+  <script src="/ui.js"></script>
+ </div>

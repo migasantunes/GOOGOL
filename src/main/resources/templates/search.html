@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Results - Googol</title>
+    <!-- Fonte Inter do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Estilos CSS da aplicação -->
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Navegação comum (Thymeleaf fragment) -->
+    <div th:insert="~{_nav :: nav}"></div>
+    
+    <main>
+      <!-- Mensagem de erro, se existir -->
+      <p th:if="${error}" class="error-msg" th:text="${error}"></p>
+      
+      <!-- Secção de resumo AI, mostra análise gerada por IA -->
+      <section th:if="${analysis}" class="ai-summary">
+        <h2>AI Overview</h2>
+        <p th:text="${analysis}"></p>
+      </section>
+
+      <!-- Secção para indexar histórias do HackerNews -->
+      <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top:1rem;">
+        <form method="post" action="/hn-index">
+          <!-- Campo oculto com a query atual -->
+          <input type="hidden" name="q" th:value="${query}" />
+          <button class="btn secondary" type="submit" style="margin-bottom: 1rem;">Index HackerNews Top Stories</button>
+        </form>
+      </div>
+
+      <!-- Lista de resultados de pesquisa -->
+      <div th:if="${results != null and !#lists.isEmpty(results)}">
+        <ul>
+          <!-- Itera sobre cada resultado -->
+          <li th:each="r : ${results}" class="result-item">
+            <div class="result-main">
+              <!-- URL do resultado -->
+              <div style="font-size: 0.85rem; color:#202124; margin-bottom:4px;" th:text="${r.url}"></div>
+              
+              <!-- Título do resultado com link -->
+              <h3 class="result-title">
+                <a th:href="${r.url}" th:text="${r.title != '' ? r.title : r.url}" target="_blank" rel="noopener"></a>
+              </h3>
+              <!-- Snippet/excerto do conteúdo -->
+              <div class="result-snippet" th:text="${r.snippet}"></div>
+            </div>
+            
+            <!-- Ações do resultado - ver inlinks -->
+            <div class="result-actions">
+               <a class="btn pill secondary" style="font-size:0.7rem;" th:href="@{/inlinks(url=${r.url},q=${query},page=${page})}">
+                 Inlinks (<span th:text="${r.inlinkCount}"></span>)
+               </a>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Paginação dos resultados -->
+        <div id="pager" style="margin-top: 3rem; display:flex; gap:0.5rem; align-items:center;">
+          <!-- Botão página anterior -->
+          <a class="btn pill secondary" th:if="${hasPrev}" th:href="@{/search(q=${query},page=${page-1})}">Previous</a>
+          <!-- Indicador da página atual -->
+          <span class="page-indicator" style="color: var(--text-main); font-weight: 500;" th:text="'Page ' + ${page}"></span>
+          <!-- Botão página seguinte -->
+          <a class="btn pill secondary" th:if="${hasNext}" th:href="@{/search(q=${query},page=${page+1})}">Next</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
