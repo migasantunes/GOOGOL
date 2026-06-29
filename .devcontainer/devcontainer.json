@@ -1,0 +1,30 @@
+{
+  "image": "maven:3.9-eclipse-temurin-21",
+  // Publish RMI registry and object ports so the host/network can reach services
+  // when VS Code starts the devcontainer. Adjust if you use docker-compose or host networking.
+  "runArgs": [
+    "-p", "8181:8181",
+    "-p", "8281:8281",
+    "-p", "8183:8183",
+    "-p", "8283:8283",
+    "-p", "8184:8184",
+    "-p", "8284:8284"
+  ],
+  "forwardPorts": [8181, 8281, 8183, 8283, 8184, 8284],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "redhat.java",
+        "vscjava.vscode-maven",
+        "vscjava.vscode-java-debug",
+        "vscjava.vscode-java-test",
+        "vscjava.vscode-java-dependency"
+      ]
+    }
+  },
+  "name": "Projeto SD: GOOGOL",
+  "features": {
+    "maven": "latest"
+  }
+}

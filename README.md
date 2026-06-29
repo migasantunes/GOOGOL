@@ -1,23 +1,30 @@
 # Googol
 
-Motor de pesquisa distribuído em Java com RMI, crawler baseado em Jsoup e interface web em Spring Boot. A aplicação mantém um gateway central, vários Barrels replicados e uma Web UI para submissão, pesquisa, inlinks, estatísticas e integração com fontes externas.
+Distributed Java search engine with RMI, a Jsoup-based crawler, and a Spring Boot web interface. The application keeps a central gateway, several replicated Barrels, and a Web UI for submission, search, inlinks, statistics, and integration with external sources.
 
-## Visão geral
+## Overview
 
-O sistema é composto por estes serviços:
+The system is composed of these services:
 
-- `GatewayServer`: recebe URLs, gere a fila de trabalho, faz proxy de pesquisa e coordena o registo de Barrels.
-- `BarrelServer`: armazena o índice invertido e os inlinks, com persistência local em ficheiro.
-- `Downloader`: consome URLs do Gateway, faz fetch das páginas e indexa o conteúdo.
-- `Client`: interface de linha de comandos para submeter URLs, pesquisar e listar inlinks.
-- `WebApplication`: aplicação Spring Boot com UI web, REST e WebSockets.
+- `GatewayServer`: receives URLs, manages the work queue, proxies search requests, and coordinates Barrel registration.
+- `BarrelServer`: stores the inverted index and inlinks, with local file-based persistence.
+- `Downloader`: consumes URLs from the Gateway, fetches pages, and indexes their content.
+- `Client`: command-line interface for submitting URLs, searching, and listing inlinks.
+- `WebApplication`: Spring Boot application with a web UI, REST, and WebSockets.
 
-O comportamento final do projeto inclui persistência simples, registo dinâmico de Barrels, backfill automático para novos Barrels, paginação de resultados, painel de estatísticas em tempo real e resumo IA opcional com Groq.
+The final project behavior includes simple persistence, dynamic Barrel registration, automatic backfill for new Barrels, paginated results, a real-time statistics dashboard, and optional AI summaries with Groq.
 
-## Requisitos
+## Requirements
 
-- Java 17 ou superior
-- Maven 3.9 ou superior
+- Java 17 or newer
+- Maven 3.9 or newer
+- Docker and VS Code if you want to use the Dev Container
+
+## Dev Container
+
+The repository includes [.devcontainer/devcontainer.json](/workspaces/projeto-sd-meta-1-ma-al/.devcontainer/devcontainer.json), with an image based on Maven and Java 21, plus forwarded ports for the RMI and web services.
+
+To open the project in that environment, use the **Reopen in Container** option in VS Code. This avoids installing local dependencies and leaves the services ready to run inside the container.
 
 ## Build
 
@@ -25,9 +32,9 @@ O comportamento final do projeto inclui persistência simples, registo dinâmico
 mvn --% -q compile
 ```
 
-## Execução local
+## Local execution
 
-Para executar tudo na mesma máquina, abre cinco terminais e inicia:
+To run everything on the same machine, open five terminals and start:
 
 1. Gateway
 ```powershell
@@ -56,28 +63,28 @@ mvn --% -q exec:java -Dexec.mainClass=search.Client -Dexec.jvmArgs="-Dgateway.ho
 
 ## Web UI
 
-Arranque a aplicação web com:
+Start the web application with:
 
 ```powershell
 mvn --% -q spring-boot:run -Dspring-boot.run.jvmArguments="-Dgateway.host=127.0.0.1 -Dgateway.port=8181 -Dgateway.name=gateway"
 ```
 
-A interface fica disponível em `http://localhost:8080` e inclui:
+The interface is available at `http://localhost:8080` and includes:
 
-- página inicial para submeter URLs
-- pesquisa paginada com ranking por inlinks
-- página de inlinks para qualquer URL indexada
-- painel de estatísticas em tempo real
-- revisão e indexação de links do Hacker News
+- home page for submitting URLs
+- paginated search with inlink-based ranking
+- inlinks page for any indexed URL
+- real-time statistics dashboard
+- review and indexing of Hacker News links
 
-## Configuração
+## Configuration
 
-As definições públicas da aplicação estão em [src/main/resources/application.properties](src/main/resources/application.properties).
-As chaves locais devem ficar fora do Git em [config/local-secrets.properties](config/local-secrets.properties), carregado automaticamente pela aplicação.
+Public application settings live in [src/main/resources/application.properties](src/main/resources/application.properties).
+Local secrets must stay out of Git in [config/local-secrets.properties](config/local-secrets.properties), which is loaded automatically by the application.
 
-Para criar o ficheiro local, copie [config/local-secrets.properties.example](config/local-secrets.properties.example) para `config/local-secrets.properties` e preencha os valores necessários.
+To create the local file, copy [config/local-secrets.properties.example](config/local-secrets.properties.example) to `config/local-secrets.properties` and fill in the required values.
 
-Exemplo:
+Example:
 
 ```properties
 spring.config.import=optional:file:./config/local-secrets.properties
@@ -85,24 +92,24 @@ groq.api.key=YOUR_GROQ_API_KEY_HERE
 groq.model=llama-3.3-70b-versatile
 ```
 
-Se `config/local-secrets.properties` não existir ou não tiver a chave, a funcionalidade de resumo IA fica indisponível, mas o resto da aplicação continua funcional.
+If `config/local-secrets.properties` does not exist or does not contain the key, the AI summary feature is unavailable, but the rest of the application keeps working.
 
 ## Scripts
 
-O repositório inclui scripts prontos para Windows e macOS:
+The repository includes ready-to-use scripts for Windows and macOS:
 
-- `scripts/run-local.ps1` / `scripts/run-local.sh`: arranque completo local
+- `scripts/run-local.ps1` / `scripts/run-local.sh`: full local startup
 - `scripts/run-machine1.ps1` / `scripts/run-machine1.sh`: Gateway + Barrel 1 + Downloader
 - `scripts/run-machine2.ps1` / `scripts/run-machine2.sh`: Barrel 2 + Downloader + Client
-- `scripts/run-web.ps1` / `scripts/run-web.sh`: arranque da Web UI
+- `scripts/run-web.ps1` / `scripts/run-web.sh`: Web UI startup
 
-## Persistência
+## Persistence
 
-- O Gateway grava a fila, URLs já visitadas e estatísticas em `gateway-state.ser`.
-- Cada Barrel guarda o índice num ficheiro próprio do tipo `<nome>-state.ser`.
-- Ao reiniciar, o estado é recarregado automaticamente.
+- The Gateway stores the queue, already visited URLs, and statistics in `gateway-state.ser`.
+- Each Barrel stores its index in its own `<name>-state.ser` file.
+- On restart, state is loaded automatically.
 
-## Estrutura do projeto
+## Project Structure
 
 ```text
 src/main/java/search/
@@ -125,14 +132,14 @@ src/main/java/search/
     model/
 ```
 
-## Comportamento relevante
+## Relevant Behavior
 
-- A indexação só é confirmada quando todos os Barrels registados aceitam a página.
-- Se houver falha parcial, o Downloader volta a tentar a URL.
-- Novos Barrels recebem backfill automático quando existe um Barrel ativo com dados.
-- A UI web usa WebSockets em `/ws` para publicar estatísticas em `/topic/stats`.
+- Indexing is only confirmed when all registered Barrels accept the page.
+- If there is a partial failure, the Downloader retries the URL.
+- New Barrels receive automatic backfill when an active Barrel with data exists.
+- The web UI uses WebSockets on `/ws` to publish statistics to `/topic/stats`.
 
-## Notas
+## Notes
 
-- O diretório `target/` não deve ser versionado; é apenas saída de compilação.
-- Para aceder à Web UI fora de `localhost`, adapte a porta `8080` ou aponte a aplicação para o Gateway correto.
+- The `target/` directory should not be versioned; it is only build output.
+- To access the Web UI from outside `localhost`, adjust port `8080` or point the application to the correct Gateway.
