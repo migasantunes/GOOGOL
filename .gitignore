@@ -1,3 +1,4 @@
 # Ignore local configuration and secrets
 target/
 config/local-secrets.properties
+*.ser
